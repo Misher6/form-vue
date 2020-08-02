@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form id="app">
+        <span v-for="e in error">{{ e }}</span>
+        <section v-if="step == 1" class="user_info">
+          <h3>Персональные данные</h3>
+          <label for="surname">Фамилия</label>
+          <input
+            class="surname"
+            v-model="form.surname"
+            type="text"
+            placeholder="Фамилия*"
+          />
+          <label for="name">Имя</label>
+          <input
+            class="name"
+            v-model="form.name"
+            type="text"
+            placeholder="Имя*"
+          />
+          <label for="father">Отчество</label>
+          <input
+            class="father"
+            v-model="form.father"
+            type="text"
+            placeholder="Отчество"
+          />
+          <label for="bd">Дата рождения</label>
+          <input
+            class="bd"
+            v-model="form.bd"
+            type="text"
+            placeholder="Дата рождения(дд.мм.гггг)"
+          />
+          <label for="phone">Телефон</label>
+          <input
+            class="phone"
+            v-model="form.phone"
+            type=" tel"
+            placeholder="+7(...)..."
+          />
+          <h3>Пол:</h3>
+          <section class="radio-inputs">
+            <input type="radio" name="gender" value="male">М
+            <input type="radio" name="gender" value="female">Ж
+          </section>
+          <label>Группа клиентов
+            <select v-model="form.multisel" size="2" multiple name="client[]">
+                <option value="VIP">VIP</option>
+                <option value="Проблемные">Проблемные</option>
+                <option value="ОМС">ОМС</option>
+            </select>
+           </label>
+          <label>Лечащий врач
+            <select name="doctor" required>   
+               <option value="Иванов">Иванов</option>
+               <option value="Захаров">Захаров</option>
+               <option value="Чернышева">Чернышева</option>
+            </select>
+          <label>
+            Не отправлять СМС <input type="checkbox" name="SMS" value="no" />
+          </label>
+        </section>
+        <section v-if="step == 2" class="user_info">
+          <h3>Адрес</h3>
+          <input type="text" placeholder="Индекс" />
+          <input type="text" placeholder="Страна" />
+          <input type="text" placeholder="Область" />
+          <input v-model="form.city" type="text" placeholder="Город*" />
+          <input type="text" placeholder="Улица" />
+          <input type="text" placeholder="Дом" />
+        </section>
+        <section v-if="step == 3" class="user_info">
+          <h3>Документ, удостоверяющий личность</h3>
+          <label>Тип документа*
+          <select name="passport" required>
+            <option value="Паспорт">Паспорт</option>
+            <option value="Свидетельство о рождении"
+              >Свидетельство о рождении</option
+            >
+            <option value="Водительское удостоверение"
+              >Водительское удостоверение</option
+            >
+          </select>
+          </label>
+          <input v-model="form.seria" type="text" placeholder="Серия" />
+          <input type="text" placeholder="Номер" />
+          <input v-model="form.whob" type="text" placeholder="Кем выдан" />
+          <input
+            v-model="form.getdate"
+            type="text"
+            placeholder="Дата выдачи*"
+          />
+        </section>
+        <section class="action">
+          <button v-if="step != 1" @click.prevent="prevStep">Назад</button>
+          <button v-if="step != totalsteps" @click.prevent="nextStep">
+            Далее
+          </button>
+          <button v-if="step == 3" @click.prevent="submit">Отправить</button>
+        </section>
+      </form>
+    </div>
+    <script>
+      const App = new Vue({
+        el: "#app",
+        data: {
+          step: 1,
+          totalsteps: 3,
+          error: [],
+          form: {
+            name: null,
+            surname: null,
+            phone: null,
+            father: null,
+            bd: null,
+            city: null,
+            seria: null,
+            whom: null,
+          },
+        },
+        methods: {
+          nextStep: function () {
+            if (this.step == 1) {
+              if (
+                (!this.form.name,
+                !this.form.bd,
+                !this.form.surname,
+                !this.form.phone,
+                !this.form.multisel)
+              ) {
+                alert("Пожалуйста заполните все поля отмеченные *");
+                return false;
+              }
+            }
+            if (this.step == 2) {
+              if (!this.form.city) {
+                alert("Пожалуйста заполните все поля отмеченные *");
+                return false;
+              }
+            }
+            if (this.step == 3) {
+              if (!this.form.getdate) {
+                alert("Пожалуйста заполните все поля отмеченные *");
+                return false;
+              }
+            }
+            this.step++;
+          },
+          prevStep: function () {
+            this.step--;
+          },
+          submit: function () {
+            alert("Клиент успешно создан");
+          },
+        },
+        mounted() {},
+      });
+    </script>
+  </body>
+</html>
